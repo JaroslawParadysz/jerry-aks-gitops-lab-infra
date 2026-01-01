@@ -120,7 +120,7 @@ resource "azurerm_automation_schedule" "stop_aks_schedule" {
   automation_account_name = azurerm_automation_account.aks_automation.name
   frequency               = "Day"
   interval                = 1
-  timezone                = "W. Europe Standard Time"
+  timezone                = "Europe/Warsaw"
   start_time              = timeadd(timestamp(), "24h") # Starts tomorrow
   description             = "Stop AKS cluster daily at 10 PM"
 
