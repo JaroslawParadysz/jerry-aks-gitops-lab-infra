@@ -38,10 +38,10 @@ resource "azurerm_automation_runbook" "stop_aks" {
   content = <<-EOT
     param(
         [Parameter(Mandatory=$true)]
-        [string]$ResourceGroupName,
+        [string]$resourcegroupname,
         
         [Parameter(Mandatory=$true)]
-        [string]$ClusterName
+        [string]$clustername
     )
 
     try {
@@ -51,9 +51,9 @@ resource "azurerm_automation_runbook" "stop_aks" {
         # Connect to Azure with system-assigned managed identity
         Connect-AzAccount -Identity
 
-        Write-Output "Stopping AKS cluster: $ClusterName in resource group: $ResourceGroupName"
+        Write-Output "Stopping AKS cluster: $clustername in resource group: $resourcegroupname"
         
-        Stop-AzAksCluster -Name $ClusterName -ResourceGroupName $ResourceGroupName -Force
+        Stop-AzAksCluster -Name $clustername -ResourceGroupName $resourcegroupname -Force
         
         Write-Output "AKS cluster stopped successfully"
     }
@@ -82,10 +82,10 @@ resource "azurerm_automation_runbook" "start_aks" {
   content = <<-EOT
     param(
         [Parameter(Mandatory=$true)]
-        [string]$ResourceGroupName,
+        [string]$resourcegroupname,
         
         [Parameter(Mandatory=$true)]
-        [string]$ClusterName
+        [string]$clustername
     )
 
     try {
@@ -95,9 +95,9 @@ resource "azurerm_automation_runbook" "start_aks" {
         # Connect to Azure with system-assigned managed identity
         Connect-AzAccount -Identity
 
-        Write-Output "Starting AKS cluster: $ClusterName in resource group: $ResourceGroupName"
+        Write-Output "Starting AKS cluster: $clustername in resource group: $resourcegroupname"
         
-        Start-AzAksCluster -Name $ClusterName -ResourceGroupName $ResourceGroupName
+        Start-AzAksCluster -Name $clustername -ResourceGroupName $resourcegroupname
         
         Write-Output "AKS cluster started successfully"
     }
@@ -137,7 +137,7 @@ resource "azurerm_automation_job_schedule" "stop_aks_job" {
   runbook_name            = azurerm_automation_runbook.stop_aks.name
 
   parameters = {
-    ResourceGroupName = azurerm_resource_group.aks_rg.name
-    ClusterName       = azurerm_kubernetes_cluster.aks.name
+    resourcegroupname = azurerm_resource_group.aks_rg.name
+    clustername       = azurerm_kubernetes_cluster.aks.name
   }
 }
