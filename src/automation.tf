@@ -19,11 +19,16 @@ resource "azurerm_automation_account" "aks_automation" {
 }
 
 # Role assignment for Automation Account to manage AKS
-resource "azurerm_role_assignment" "automation_aks_contributor" {
-  scope                = azurerm_kubernetes_cluster.aks.id
-  role_definition_name = "Azure Kubernetes Service Contributor Role"
-  principal_id         = azurerm_automation_account.aks_automation.identity[0].principal_id
-}
+# NOTE: This requires User Access Administrator or Owner role to create role assignments
+# If you get AuthorizationFailed errors, either:
+#   1. Have an admin with proper permissions apply this separately
+#   2. Manually assign the role in Azure Portal after deployment
+#   3. Request User Access Administrator role for your account/service principal
+# resource "azurerm_role_assignment" "automation_aks_contributor" {
+#   scope                = azurerm_kubernetes_cluster.aks.id
+#   role_definition_name = "Azure Kubernetes Service Contributor Role"
+#   principal_id         = azurerm_automation_account.aks_automation.identity[0].principal_id
+# }
 
 # Runbook to stop AKS cluster
 resource "azurerm_automation_runbook" "stop_aks" {
