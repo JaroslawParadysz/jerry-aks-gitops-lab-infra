@@ -1,6 +1,6 @@
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -18,7 +18,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  
+
   # Authentication will be handled by:
   # - Azure CLI for local development
   # - Service Principal from GitHub Secrets for CI/CD

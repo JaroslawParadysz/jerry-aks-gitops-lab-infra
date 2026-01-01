@@ -4,11 +4,11 @@ resource "azurerm_resource_group" "aks_rg" {
   location = var.location
 
   tags = {
-    Environment  = var.env_name
-    ManagedBy    = "Terraform"
-    Project      = "AKS-GitOps"
-    Customer     = var.customer_name
-    Module       = var.module_name
+    Environment = var.env_name
+    ManagedBy   = "Terraform"
+    Project     = "AKS-GitOps"
+    Customer    = var.customer_name
+    Module      = var.module_name
   }
 }
 
@@ -20,11 +20,11 @@ resource "azurerm_virtual_network" "aks_vnet" {
   address_space       = var.vnet_address_space
 
   tags = {
-    Environment  = var.env_name
-    ManagedBy    = "Terraform"
-    Project      = "AKS-GitOps"
-    Customer     = var.customer_name
-    Module       = var.module_name
+    Environment = var.env_name
+    ManagedBy   = "Terraform"
+    Project     = "AKS-GitOps"
+    Customer    = var.customer_name
+    Module      = var.module_name
   }
 }
 

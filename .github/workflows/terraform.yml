@@ -42,10 +42,9 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Terraform Format Check
+    - name: Terraform Format
       id: fmt
-      run: terraform fmt -check
-      continue-on-error: true
+      run: terraform fmt -recursive
     
     - name: Terraform Init
       id: init
