@@ -215,6 +215,39 @@ az group delete --name rg-aks-gitops-dev --yes
 - Network policy: Calico
 - Modify the variables in GitHub Secrets to customize your deployment
 
+## ⏰ Cost Optimization - Automated Start/Stop
+
+The infrastructure includes Azure Automation to automatically stop your AKS cluster:
+
+**Schedules:**
+- 🛑 **Stop**: Daily at 10 PM (W. Europe Time)
+- ▶️ **Start**: Manual (you control when to start)
+
+**Cost Savings**: ~70% reduction during stopped hours (still pay for disks and IPs)
+
+**Manual Start/Stop:**
+```powershell
+# Start cluster manually
+az aks start --name <cluster-name> --resource-group <rg-name>
+
+# Stop cluster manually (if needed before 10 PM)
+az aks stop --name <cluster-name> --resource-group <rg-name>
+
+# Check cluster status
+az aks show --name <cluster-name> --resource-group <rg-name> --query powerState
+```
+
+**Trigger Start Runbook from Azure Portal:**
+1. Go to Automation Account → Runbooks
+2. Select "Start-AKSCluster"
+3. Click "Start"
+4. Provide parameters (ResourceGroupName, ClusterName)
+
+**Customize Stop Schedule:**
+- Edit schedule in [src/automation.tf](src/automation.tf)
+- Modify timezone or time
+- Run `terraform apply` to update
+
 ## 🔗 Useful Commands
 
 ```powershell

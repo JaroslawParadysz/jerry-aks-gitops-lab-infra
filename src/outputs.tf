@@ -8,23 +8,38 @@ output "vnet_id" {
   value       = azurerm_virtual_network.aks_vnet.id
 }
 
-#output "aks_cluster_name" {
-#  description = "The name of the AKS cluster"
-#  value       = azurerm_kubernetes_cluster.aks.name
-#}
-#
-#output "aks_cluster_id" {
-#  description = "The ID of the AKS cluster"
-#  value       = azurerm_kubernetes_cluster.aks.id
-#}
-#
-#output "aks_kubeconfig" {
-#  description = "Kubeconfig for the AKS cluster"
-#  value       = azurerm_kubernetes_cluster.aks.kube_config_raw
-#  sensitive   = true
-#}
-#
-#output "aks_cluster_fqdn" {
-#  description = "The FQDN of the AKS cluster"
-#  value       = azurerm_kubernetes_cluster.aks.fqdn
-#}
+output "aks_cluster_name" {
+  description = "The name of the AKS cluster"
+  value       = azurerm_kubernetes_cluster.aks.name
+}
+
+output "aks_cluster_id" {
+  description = "The ID of the AKS cluster"
+  value       = azurerm_kubernetes_cluster.aks.id
+}
+
+output "aks_kubeconfig" {
+  description = "Kubeconfig for the AKS cluster"
+  value       = azurerm_kubernetes_cluster.aks.kube_config_raw
+  sensitive   = true
+}
+
+output "aks_cluster_fqdn" {
+  description = "The FQDN of the AKS cluster"
+  value       = azurerm_kubernetes_cluster.aks.fqdn
+}
+
+output "automation_account_name" {
+  description = "The name of the Azure Automation Account"
+  value       = azurerm_automation_account.aks_automation.name
+}
+
+output "stop_schedule" {
+  description = "AKS stop schedule"
+  value       = "Daily at 10 PM (W. Europe Time)"
+}
+
+output "start_runbook" {
+  description = "Manual start runbook"
+  value       = "Use Azure Portal or CLI to manually trigger Start-AKSCluster runbook"
+}

@@ -36,34 +36,34 @@ resource "azurerm_subnet" "aks_subnet" {
   address_prefixes     = var.aks_subnet_address
 }
 
-## AKS Cluster
-#resource "azurerm_kubernetes_cluster" "aks" {
-#  name                = "${var.customer_name}-aks-${var.module_name}-${var.env_name}"
-#  location            = azurerm_resource_group.aks_rg.location
-#  resource_group_name = azurerm_resource_group.aks_rg.name
-#  dns_prefix          = "${var.customer_name}-${var.module_name}-${var.env_name}"
-#
-#  default_node_pool {
-#    name           = "default"
-#    node_count     = var.aks_node_count
-#    vm_size        = var.aks_node_vm_size
-#    vnet_subnet_id = azurerm_subnet.aks_subnet.id
-#  }
-#
-#  identity {
-#    type = "SystemAssigned"
-#  }
-#
-#  network_profile {
-#    network_plugin = "azure"
-#    network_policy = "calico"
-#  }
-#
-#  tags = {
-#    Environment  = var.env_name
-#    ManagedBy    = "Terraform"
-#    Project      = "AKS-GitOps"
-#    Customer     = var.customer_name
-#    Module       = var.module_name
-#  }
-#}
+# AKS Cluster
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = "${var.customer_name}-aks-${var.module_name}-${var.env_name}"
+  location            = azurerm_resource_group.aks_rg.location
+  resource_group_name = azurerm_resource_group.aks_rg.name
+  dns_prefix          = "${var.customer_name}-${var.module_name}-${var.env_name}"
+
+  default_node_pool {
+    name           = "default"
+    node_count     = var.aks_node_count
+    vm_size        = var.aks_node_vm_size
+    vnet_subnet_id = azurerm_subnet.aks_subnet.id
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  network_profile {
+    network_plugin = "azure"
+    network_policy = "calico"
+  }
+
+  tags = {
+    Environment  = var.env_name
+    ManagedBy    = "Terraform"
+    Project      = "AKS-GitOps"
+    Customer     = var.customer_name
+    Module       = var.module_name
+  }
+}
