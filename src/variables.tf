@@ -1,21 +1,19 @@
 variable "customer_name" {
   description = "Customer name for resource naming convention"
   type        = string
+  default     = "cantoso"
 }
 
 variable "module_name" {
   description = "Module name for resource naming convention"
   type        = string
+  default     = "mod"
 }
 
 variable "env_name" {
   description = "Environment name for resource naming convention (e.g., dev, staging, prod)"
   type        = string
-}
-
-variable "resource_group_name" {
-  description = "Name of the Azure Resource Group"
-  type        = string
+  default     = "test"
 }
 
 variable "location" {
@@ -24,36 +22,16 @@ variable "location" {
   default     = "West Europe"
 }
 
-variable "vnet_name" {
-  description = "Name of the Virtual Network"
-  type        = string
-}
-
 variable "vnet_address_space" {
   description = "Address space for the Virtual Network"
   type        = list(string)
   default     = ["10.0.0.0/16"]
 }
 
-variable "aks_subnet_name" {
-  description = "Name of the AKS subnet"
-  type        = string
-}
-
 variable "aks_subnet_address" {
   description = "Address prefix for the AKS subnet"
   type        = list(string)
   default     = ["10.0.1.0/24"]
-}
-
-variable "aks_cluster_name" {
-  description = "Name of the AKS cluster"
-  type        = string
-}
-
-variable "aks_dns_prefix" {
-  description = "DNS prefix for the AKS cluster"
-  type        = string
 }
 
 variable "aks_node_count" {
