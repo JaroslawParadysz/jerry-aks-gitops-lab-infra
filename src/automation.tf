@@ -1,3 +1,6 @@
+# Get current subscription
+data "azurerm_client_config" "current" {}
+
 # Azure Automation Account for AKS Start/Stop
 resource "azurerm_automation_account" "aks_automation" {
   name                = "${var.customer_name}-aa-${var.module_name}-${var.env_name}"
@@ -46,7 +49,10 @@ resource "azurerm_automation_runbook" "stop_aks" {
         [string]$resourcegroupname,
         
         [Parameter(Mandatory=$true)]
-        [string]$clustername
+        [string]$clustername,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$subscriptionid
     )
 
     try {
@@ -54,7 +60,11 @@ resource "azurerm_automation_runbook" "stop_aks" {
         Disable-AzContextAutosave -Scope Process
 
         # Connect to Azure with system-assigned managed identity
-        Connect-AzAccount -Identity
+        $AzureContext = (Connect-AzAccount -Identity).context
+        
+        # Set the subscription context
+        $AzureContext = Set-AzContext -SubscriptionId $subscriptionid -DefaultProfile $AzureContext
+        Write-Output "Connected to subscription: $subscriptionid"
 
         Write-Output "Stopping AKS cluster: $clustername in resource group: $resourcegroupname"
         
@@ -90,7 +100,10 @@ resource "azurerm_automation_runbook" "start_aks" {
         [string]$resourcegroupname,
         
         [Parameter(Mandatory=$true)]
-        [string]$clustername
+        [string]$clustername,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$subscriptionid
     )
 
     try {
@@ -98,7 +111,11 @@ resource "azurerm_automation_runbook" "start_aks" {
         Disable-AzContextAutosave -Scope Process
 
         # Connect to Azure with system-assigned managed identity
-        Connect-AzAccount -Identity
+        $AzureContext = (Connect-AzAccount -Identity).context
+        
+        # Set the subscription context
+        $AzureContext = Set-AzContext -SubscriptionId $subscriptionid -DefaultProfile $AzureContext
+        Write-Output "Connected to subscription: $subscriptionid"
 
         Write-Output "Starting AKS cluster: $clustername in resource group: $resourcegroupname"
         
@@ -144,5 +161,6 @@ resource "azurerm_automation_job_schedule" "stop_aks_job" {
   parameters = {
     resourcegroupname = azurerm_resource_group.aks_rg.name
     clustername       = azurerm_kubernetes_cluster.aks.name
+    subscriptionid    = data.azurerm_client_config.current.subscription_id
   }
 }
