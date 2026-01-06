@@ -58,7 +58,7 @@ resource "azurerm_automation_runbook" "stop_aks" {
 
         Write-Output "Stopping AKS cluster: $clustername in resource group: $resourcegroupname"
         
-        Stop-AzAksCluster -Name $clustername -ResourceGroupName $resourcegroupname -Force
+        Stop-AzAksCluster -Name $clustername -ResourceGroupName $resourcegroupname
         
         Write-Output "AKS cluster stopped successfully"
     }
