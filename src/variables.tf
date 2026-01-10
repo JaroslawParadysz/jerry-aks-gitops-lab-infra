@@ -37,7 +37,7 @@ variable "aks_subnet_address" {
 variable "aks_node_count" {
   description = "Number of nodes in the AKS cluster"
   type        = number
-  default     = 3
+  default     = 2
 }
 
 variable "aks_node_vm_size" {
