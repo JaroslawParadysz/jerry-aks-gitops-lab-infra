@@ -5,7 +5,7 @@ output "resource_group_name" {
 
 output "vnet_id" {
   description = "The ID of the virtual network"
-  value       = azurerm_virtual_network.aks_vnet.id
+  value       = module.vnet.vnet_id
 }
 
 output "aks_cluster_name" {

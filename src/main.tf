@@ -12,12 +12,21 @@ resource "azurerm_resource_group" "aks_rg" {
   }
 }
 
-# Virtual Network
-resource "azurerm_virtual_network" "aks_vnet" {
+# Virtual Network Module
+module "vnet" {
+  source = "./modules/vnet"
+
   name                = "${var.customer_name}-vnet-${var.module_name}-${var.env_name}"
   location            = azurerm_resource_group.aks_rg.location
   resource_group_name = azurerm_resource_group.aks_rg.name
   address_space       = var.vnet_address_space
+
+  subnets = {
+    aks = {
+      name             = "${var.customer_name}-snet-${var.module_name}-aks-${var.env_name}"
+      address_prefixes = var.aks_subnet_address
+    }
+  }
 
   tags = {
     Environment = var.env_name
@@ -26,14 +35,6 @@ resource "azurerm_virtual_network" "aks_vnet" {
     Customer    = var.customer_name
     Module      = var.module_name
   }
-}
-
-# Subnet for AKS
-resource "azurerm_subnet" "aks_subnet" {
-  name                 = "${var.customer_name}-snet-${var.module_name}-aks-${var.env_name}"
-  resource_group_name  = azurerm_resource_group.aks_rg.name
-  virtual_network_name = azurerm_virtual_network.aks_vnet.name
-  address_prefixes     = var.aks_subnet_address
 }
 
 # AKS Cluster
@@ -47,7 +48,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     name           = "default"
     node_count     = var.aks_node_count
     vm_size        = var.aks_node_vm_size
-    vnet_subnet_id = azurerm_subnet.aks_subnet.id
+    vnet_subnet_id = module.vnet.subnet_ids["aks"]
   }
 
   identity {
