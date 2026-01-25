@@ -12,6 +12,17 @@ resource "azurerm_resource_group" "aks_rg" {
   }
 }
 
+# State migration - move existing resources to module
+moved {
+  from = azurerm_virtual_network.aks_vnet
+  to   = module.vnet.azurerm_virtual_network.vnet
+}
+
+moved {
+  from = azurerm_subnet.aks_subnet
+  to   = module.vnet.azurerm_subnet.subnet["aks"]
+}
+
 # Virtual Network Module
 module "vnet" {
   source = "./modules/vnet"
