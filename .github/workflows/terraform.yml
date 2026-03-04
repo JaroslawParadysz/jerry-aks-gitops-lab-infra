@@ -1,5 +1,9 @@
 name: 'Terraform Azure Infrastructure'
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches:
@@ -40,7 +44,9 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        client-id: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+        tenant-id: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+        subscription-id: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
     
     - name: Terraform Format
       id: fmt
@@ -56,9 +62,9 @@ jobs:
           -backend-config="key=${{ secrets.TF_BACKEND_KEY }}"
       env:
         ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-        ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
         ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
         ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+        ARM_USE_OIDC: true
     
     - name: Terraform Validate
       id: validate
@@ -74,9 +80,9 @@ jobs:
           -var="location=${{ secrets.TF_VAR_LOCATION }}"
       env:
         ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-        ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
         ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
         ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+        ARM_USE_OIDC: true
       continue-on-error: true
     
     - name: Terraform Plan Status
@@ -93,6 +99,6 @@ jobs:
           -var="location=${{ secrets.TF_VAR_LOCATION }}"
       env:
         ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-        ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
         ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
         ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+        ARM_USE_OIDC: true
