@@ -1,16 +1,5 @@
-locals {
-  storage_account_name = var.storage_account_name != null ? var.storage_account_name : substr(
-    regexreplace(lower("${var.customer_name}-sa-${var.module_name}-${var.env_name}"), "[^a-z0-9]", ""),
-    0,
-    24
-  )
-
-  storage_account_scope = azurerm_storage_account.aks_queue_storage.id
-  queue_scope           = "${azurerm_storage_account.aks_queue_storage.id}/queueServices/default/queues/${azurerm_storage_queue.orchestrator.name}"
-}
-
 resource "azurerm_storage_account" "aks_queue_storage" {
-  name                     = local.storage_account_name
+  name                     = "${var.customer_name}-sa-${var.module_name}-${var.env_name}"
   resource_group_name      = azurerm_resource_group.aks_rg.name
   location                 = azurerm_resource_group.aks_rg.location
   account_tier             = "Standard"
@@ -46,25 +35,25 @@ resource "azurerm_user_assigned_identity" "aks_queue_identity" {
 }
 
 resource "azurerm_role_assignment" "aks_queue_data_reader" {
-  scope                = local.queue_scope
+  scope                = "${azurerm_storage_account.aks_queue_storage.id}/queueServices/default/queues/${azurerm_storage_queue.orchestrator.name}"
   role_definition_name = "Storage Queue Data Reader"
   principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
 }
 
 resource "azurerm_role_assignment" "aks_queue_data_message_processor" {
-  scope                = local.queue_scope
+  scope                = "${azurerm_storage_account.aks_queue_storage.id}/queueServices/default/queues/${azurerm_storage_queue.orchestrator.name}"
   role_definition_name = "Storage Queue Data Message Processor"
   principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
 }
 
 resource "azurerm_role_assignment" "aks_blob_data_contributor" {
-  scope                = local.storage_account_scope
+  scope                = azurerm_storage_account.aks_queue_storage.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
 }
 
 resource "azurerm_role_assignment" "aks_file_data_privileged_contributor" {
-  scope                = local.storage_account_scope
+  scope                = azurerm_storage_account.aks_queue_storage.id
   role_definition_name = "Storage File Data Privileged Contributor"
   principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
 }
