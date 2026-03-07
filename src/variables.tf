@@ -45,3 +45,20 @@ variable "aks_node_vm_size" {
   type        = string
   default     = "Standard_D2s_v3"
 }
+
+variable "storage_account_name" {
+  description = "Optional custom name for the storage account (must be globally unique, lowercase letters and numbers only, 3-24 chars)."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.storage_account_name == null || can(regex("^[a-z0-9]{3,24}$", var.storage_account_name))
+    error_message = "storage_account_name must be 3-24 characters, using lowercase letters and numbers only."
+  }
+}
+
+variable "queue_name" {
+  description = "Queue name to create in the storage account"
+  type        = string
+  default     = "archestrator"
+}
