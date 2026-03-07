@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "aks_queue_storage" {
-  name                     = lower("${var.customer_name}sa${var.module_name}${var.env_name}")
+  name                     = lower("${var.customer_name}sagitopsjp${var.env_name}")
   resource_group_name      = azurerm_resource_group.aks_rg.name
   location                 = azurerm_resource_group.aks_rg.location
   account_tier             = "Standard"
