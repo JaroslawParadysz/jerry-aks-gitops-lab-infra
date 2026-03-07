@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "aks_queue_storage" {
-  name                     = "${var.customer_name}sa${var.module_name}${var.env_name}"
+  name                     = lower("${var.customer_name}sa${var.module_name}${var.env_name}")
   resource_group_name      = azurerm_resource_group.aks_rg.name
   location                 = azurerm_resource_group.aks_rg.location
   account_tier             = "Standard"
@@ -16,7 +16,7 @@ resource "azurerm_storage_account" "aks_queue_storage" {
 }
 
 resource "azurerm_storage_queue" "orchestrator" {
-  name                 = var.queue_name
+  name                 = "orchestrator"
   storage_account_name = azurerm_storage_account.aks_queue_storage.name
 }
 
