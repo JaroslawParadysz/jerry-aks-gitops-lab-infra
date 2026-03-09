@@ -20,6 +20,11 @@ resource "azurerm_storage_queue" "orchestrator" {
   storage_account_name = azurerm_storage_account.aks_queue_storage.name
 }
 
+resource "azurerm_storage_queue" "orchestrator_dev" {
+  name                 = "orchestratordev"
+  storage_account_name = azurerm_storage_account.aks_queue_storage.name
+}
+
 resource "azurerm_user_assigned_identity" "aks_queue_identity" {
   name                = "${var.customer_name}-mi-aks-queue-${var.env_name}"
   location            = azurerm_resource_group.aks_rg.location
