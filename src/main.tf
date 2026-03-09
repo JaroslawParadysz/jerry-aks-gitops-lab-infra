@@ -43,6 +43,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = azurerm_resource_group.aks_rg.location
   resource_group_name = azurerm_resource_group.aks_rg.name
   dns_prefix          = "${var.customer_name}-${var.module_name}-${var.env_name}"
+  oidc_issuer_enabled = true
+  workload_identity_enabled = true
 
   default_node_pool {
     name           = "default"
