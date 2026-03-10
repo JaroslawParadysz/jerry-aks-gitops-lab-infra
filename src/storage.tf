@@ -60,6 +60,12 @@ resource "azurerm_role_assignment" "aks_queue_data_message_processor" {
   principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
 }
 
+resource "azurerm_role_assignment" "aks_queue_data_contributor" {
+  scope                = azurerm_storage_account.aks_queue_storage.id
+  role_definition_name = "Storage Queue Data Contributor"
+  principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
+}
+
 resource "azurerm_role_assignment" "aks_blob_data_contributor" {
   scope                = azurerm_storage_account.aks_queue_storage.id
   role_definition_name = "Storage Blob Data Contributor"
