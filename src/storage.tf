@@ -25,6 +25,12 @@ resource "azurerm_storage_queue" "orchestrator_dev" {
   storage_account_name = azurerm_storage_account.aks_queue_storage.name
 }
 
+resource "azurerm_storage_share" "orchestrator" {
+  name               = "orchestrator"
+  storage_account_id = azurerm_storage_account.aks_queue_storage.id
+  quota              = 50
+}
+
 resource "azurerm_user_assigned_identity" "aks_queue_identity" {
   name                = "${var.customer_name}-mi-aks-queue-${var.env_name}"
   location            = azurerm_resource_group.aks_rg.location
