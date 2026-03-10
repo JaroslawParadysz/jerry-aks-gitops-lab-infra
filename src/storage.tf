@@ -83,3 +83,9 @@ resource "azurerm_role_assignment" "aks_file_data_privileged_contributor" {
   role_definition_name = "Storage File Data Privileged Contributor"
   principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
 }
+
+resource "azurerm_role_assignment" "aks_file_share_reader" {
+  scope                = "${azurerm_storage_account.aks_queue_storage.id}/fileServices/default/fileshares/${azurerm_storage_share.orchestrator.name}"
+  role_definition_name = "Storage File Data Privileged Reader"
+  principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
+}
