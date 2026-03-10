@@ -54,6 +54,15 @@ resource "azurerm_federated_identity_credential" "orchestrator_sa" {
   subject             = "system:serviceaccount:orchestrator:orchestrator-sa"
 }
 
+resource "azurerm_federated_identity_credential" "keda_operator_sa" {
+  name                = "keda-operator-sa-fic"
+  resource_group_name = azurerm_resource_group.aks_rg.name
+  parent_id           = azurerm_user_assigned_identity.aks_queue_identity.id
+  audience            = ["api://AzureADTokenExchange"]
+  issuer              = azurerm_kubernetes_cluster.aks.oidc_issuer_url
+  subject             = "system:serviceaccount:keda:keda-operator"
+}
+
 resource "azurerm_role_assignment" "aks_queue_data_reader" {
   scope                = "${azurerm_storage_account.aks_queue_storage.id}/queueServices/default/queues/${azurerm_storage_queue.orchestrator.name}"
   role_definition_name = "Storage Queue Data Reader"
