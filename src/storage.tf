@@ -21,7 +21,7 @@ resource "azurerm_storage_queue" "orchestrator" {
 }
 
 resource "azurerm_storage_queue" "orchestrator_dev" {
-  name                 = "orchestratordev"
+  name                 = "orchestrator-dev"
   storage_account_name = azurerm_storage_account.aks_queue_storage.name
 }
 
@@ -64,13 +64,13 @@ resource "azurerm_federated_identity_credential" "keda_operator_sa" {
 }
 
 resource "azurerm_role_assignment" "aks_queue_data_reader" {
-  scope                = "${azurerm_storage_account.aks_queue_storage.id}/queueServices/default/queues/${azurerm_storage_queue.orchestrator.name}"
+  scope                = "${azurerm_storage_account.aks_queue_storage.id}/queueServices/default/queues/${azurerm_storage_queue.orchestrator_dev.name}"
   role_definition_name = "Storage Queue Data Reader"
   principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
 }
 
 resource "azurerm_role_assignment" "aks_queue_data_message_processor" {
-  scope                = "${azurerm_storage_account.aks_queue_storage.id}/queueServices/default/queues/${azurerm_storage_queue.orchestrator.name}"
+  scope                = "${azurerm_storage_account.aks_queue_storage.id}/queueServices/default/queues/${azurerm_storage_queue.orchestrator_dev.name}"
   role_definition_name = "Storage Queue Data Message Processor"
   principal_id         = azurerm_user_assigned_identity.aks_queue_identity.principal_id
 }
